@@ -1,9 +1,19 @@
 <resources>
     <string name="app_name">FastTripPlanner</string>
-
     <string name="titulo_tela1">Dados da Viagem</string>
     <string name="hint_destino">Destino (ex: Paris, França)</string>
     <string name="hint_dias">Número de dias</string>
     <string name="hint_orcamento">Orçamento diário (R$)</string>
     <string name="btn_avancar">Avançar</string>
+    <string name="titulo_tela2">Opções da Viagem</string>
+    <string name="label_hospedagem">Tipo de hospedagem</string>
+    <string name="hospedagem_economica">Econômica (×1,0)</string>
+    <string name="hospedagem_conforto">Conforto (×1,5)</string>
+    <string name="hospedagem_luxo">Luxo (×2,2)</string>
+    <string name="label_servicos">Serviços adicionais</string>
+    <string name="servico_transporte">Transporte (+R$ 300 fixo)</string>
+    <string name="servico_alimentacao">Alimentação (+R$ 50/dia)</string>
+    <string name="servico_passeios">Passeios (+R$ 120/dia)</string>
+    <string name="btn_calcular">Calcular</string>
+    <string name="btn_voltar">Voltar</string>
 </resources>

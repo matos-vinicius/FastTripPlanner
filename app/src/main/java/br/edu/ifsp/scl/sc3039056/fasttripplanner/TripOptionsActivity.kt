@@ -1,0 +1,82 @@
+package br.edu.ifsp.scl.sc3039056.fasttripplanner
+
+import android.content.Intent
+import android.os.Bundle
+import android.widget.Toast
+import androidx.activity.enableEdgeToEdge
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import br.edu.ifsp.scl.sc3039056.fasttripplanner.databinding.ActivityTripOptionsBinding
+
+class TripOptionsActivity : AppCompatActivity() {
+
+    private val activityTripOptionsBinding: ActivityTripOptionsBinding by lazy {
+        ActivityTripOptionsBinding.inflate(layoutInflater)
+    }
+
+    private var destino   = ""
+    private var dias      = 0
+    private var orcamento = 0.0
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
+        setContentView(activityTripOptionsBinding.root)
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+            insets
+        }
+
+        destino   = intent.getStringExtra("EXTRA_DESTINO") ?: ""
+        dias      = intent.getIntExtra("EXTRA_DIAS", 0)
+        orcamento = intent.getDoubleExtra("EXTRA_ORCAMENTO", 0.0)
+
+        if (savedInstanceState != null) {
+            val hospedagemId = savedInstanceState.getInt("hospedagem_id", -1)
+            if (hospedagemId != -1) activityTripOptionsBinding.hospedagemRg.check(hospedagemId)
+            activityTripOptionsBinding.transporteCb.isChecked  = savedInstanceState.getBoolean("transporte")
+            activityTripOptionsBinding.alimentacaoCb.isChecked = savedInstanceState.getBoolean("alimentacao")
+            activityTripOptionsBinding.passeiosCb.isChecked    = savedInstanceState.getBoolean("passeios")
+        } else {
+            activityTripOptionsBinding.economicaRb.isChecked = true
+        }
+
+        activityTripOptionsBinding.calcularBt.setOnClickListener {
+            if (activityTripOptionsBinding.hospedagemRg.checkedRadioButtonId == -1) {
+                Toast.makeText(this, "Selecione o tipo de hospedagem", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            val hospedagem = when (activityTripOptionsBinding.hospedagemRg.checkedRadioButtonId) {
+                R.id.economica_rb -> "economica"
+                R.id.conforto_rb  -> "conforto"
+                R.id.luxo_rb      -> "luxo"
+                else              -> "economica"
+            }
+
+            val tripSummaryIntent = Intent(this, TripSummaryActivity::class.java)
+            tripSummaryIntent.putExtra("EXTRA_DESTINO",     destino)
+            tripSummaryIntent.putExtra("EXTRA_DIAS",        dias)
+            tripSummaryIntent.putExtra("EXTRA_ORCAMENTO",   orcamento)
+            tripSummaryIntent.putExtra("EXTRA_HOSPEDAGEM",  hospedagem)
+            tripSummaryIntent.putExtra("EXTRA_TRANSPORTE",  activityTripOptionsBinding.transporteCb.isChecked)
+            tripSummaryIntent.putExtra("EXTRA_ALIMENTACAO", activityTripOptionsBinding.alimentacaoCb.isChecked)
+            tripSummaryIntent.putExtra("EXTRA_PASSEIOS",    activityTripOptionsBinding.passeiosCb.isChecked)
+            startActivity(tripSummaryIntent)
+        }
+
+        activityTripOptionsBinding.voltarBt.setOnClickListener {
+            finish()
+        }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putInt("hospedagem_id", activityTripOptionsBinding.hospedagemRg.checkedRadioButtonId)
+        outState.putBoolean("transporte",  activityTripOptionsBinding.transporteCb.isChecked)
+        outState.putBoolean("alimentacao", activityTripOptionsBinding.alimentacaoCb.isChecked)
+        outState.putBoolean("passeios",    activityTripOptionsBinding.passeiosCb.isChecked)
+    }
+}
