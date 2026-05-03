@@ -16,4 +16,6 @@
     <string name="servico_passeios">Passeios (+R$ 120/dia)</string>
     <string name="btn_calcular">Calcular</string>
     <string name="btn_voltar">Voltar</string>
+    <string name="titulo_tela3">Resumo da Viagem</string>
+    <string name="btn_reiniciar">Novo Planejamento</string>
 </resources>
