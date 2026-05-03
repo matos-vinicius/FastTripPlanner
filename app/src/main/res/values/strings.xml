@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">FastTripPlanner</string>
+
+    <string name="titulo_tela1">Dados da Viagem</string>
+    <string name="hint_destino">Destino (ex: Paris, França)</string>
+    <string name="hint_dias">Número de dias</string>
+    <string name="hint_orcamento">Orçamento diário (R$)</string>
+    <string name="btn_avancar">Avançar</string>
 </resources>
