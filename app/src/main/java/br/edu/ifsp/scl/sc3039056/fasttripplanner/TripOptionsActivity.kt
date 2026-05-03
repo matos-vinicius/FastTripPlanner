@@ -11,10 +11,12 @@ import br.edu.ifsp.scl.sc3039056.fasttripplanner.databinding.ActivityTripOptions
 
 class TripOptionsActivity : AppCompatActivity() {
 
+    // viewBinding: gera referências diretas aos componentes do layout activity_trip_options.xml
     private val activityTripOptionsBinding: ActivityTripOptionsBinding by lazy {
         ActivityTripOptionsBinding.inflate(layoutInflater)
     }
 
+    // Armazena os dados recebidos da MainActivity para repassar à próxima tela
     private var destino   = ""
     private var dias      = 0
     private var orcamento = 0.0
@@ -29,10 +31,12 @@ class TripOptionsActivity : AppCompatActivity() {
             insets
         }
 
+        // Recebe os dados enviados pela MainActivity via Intent
         destino   = intent.getStringExtra("EXTRA_DESTINO") ?: ""
         dias      = intent.getIntExtra("EXTRA_DIAS", 0)
         orcamento = intent.getDoubleExtra("EXTRA_ORCAMENTO", 0.0)
 
+        // Restaura o estado dos componentes após rotação de tela
         if (savedInstanceState != null) {
             val hospedagemId = savedInstanceState.getInt("hospedagem_id", -1)
             if (hospedagemId != -1) activityTripOptionsBinding.hospedagemRg.check(hospedagemId)
@@ -40,15 +44,18 @@ class TripOptionsActivity : AppCompatActivity() {
             activityTripOptionsBinding.alimentacaoCb.isChecked = savedInstanceState.getBoolean("alimentacao")
             activityTripOptionsBinding.passeiosCb.isChecked    = savedInstanceState.getBoolean("passeios")
         } else {
+            // Primeira abertura: define econômica como opção padrão
             activityTripOptionsBinding.economicaRb.isChecked = true
         }
 
         activityTripOptionsBinding.calcularBt.setOnClickListener {
+            // Validação: verifica se algum tipo de hospedagem foi selecionado
             if (activityTripOptionsBinding.hospedagemRg.checkedRadioButtonId == -1) {
                 Toast.makeText(this, "Selecione o tipo de hospedagem", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
+            // Converte o id do RadioButton selecionado para uma string identificadora
             val hospedagem = when (activityTripOptionsBinding.hospedagemRg.checkedRadioButtonId) {
                 R.id.economica_rb -> "economica"
                 R.id.conforto_rb  -> "conforto"
@@ -56,6 +63,7 @@ class TripOptionsActivity : AppCompatActivity() {
                 else              -> "economica"
             }
 
+            // Cria a Intent explícita para a Tela 3 e envia todos os dados como extras
             val tripSummaryIntent = Intent(this, TripSummaryActivity::class.java)
             tripSummaryIntent.putExtra("EXTRA_DESTINO",     destino)
             tripSummaryIntent.putExtra("EXTRA_DIAS",        dias)
@@ -67,11 +75,13 @@ class TripOptionsActivity : AppCompatActivity() {
             startActivity(tripSummaryIntent)
         }
 
+        // Volta para a Tela 1 removendo esta Activity da pilha
         activityTripOptionsBinding.voltarBt.setOnClickListener {
             finish()
         }
     }
 
+    // Salva o estado dos componentes antes da rotação de tela
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putInt("hospedagem_id", activityTripOptionsBinding.hospedagemRg.checkedRadioButtonId)
