@@ -52,3 +52,7 @@ custoTotal = custoBase + extras
 1. Clone o repositório
 2. Abra no Android Studio
 3. Execute em um emulador ou dispositivo com Android 8.0 ou superior
+
+## 🎥 Demonstração
+
+O vídeo está na pasta /demo
