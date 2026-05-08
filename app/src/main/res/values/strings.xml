@@ -18,4 +18,5 @@
     <string name="btn_voltar">Voltar</string>
     <string name="titulo_tela3">Resumo da Viagem</string>
     <string name="btn_reiniciar">Novo Planejamento</string>
+    <string name="modo_economico">Modo Econômico</string>
 </resources>

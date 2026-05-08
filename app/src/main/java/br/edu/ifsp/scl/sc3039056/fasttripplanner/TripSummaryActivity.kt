@@ -33,6 +33,7 @@ class TripSummaryActivity : AppCompatActivity() {
         val temTransporte  = intent.getBooleanExtra("EXTRA_TRANSPORTE", false)
         val temAlimentacao = intent.getBooleanExtra("EXTRA_ALIMENTACAO", false)
         val temPasseios    = intent.getBooleanExtra("EXTRA_PASSEIOS", false)
+        val modoEconomico  = intent.getBooleanExtra("EXTRA_ECONOMICO", false)
 
         // Define o multiplicador de custo conforme o tipo de hospedagem escolhido
         val multiplicador = when (hospedagem) {
@@ -42,7 +43,14 @@ class TripSummaryActivity : AppCompatActivity() {
         }
 
         // Calcula o custo base: dias × orçamento diário × multiplicador da hospedagem
-        val custoBase = dias * orcamento * multiplicador
+        var custoBase = 0.0
+
+        if (modoEconomico){
+            custoBase = dias * (orcamento * 0.85) * multiplicador
+        } else {
+            custoBase = dias * orcamento * multiplicador
+        }
+
 
         // Calcula os custos extras conforme os serviços selecionados
         var custoExtras = 0.0

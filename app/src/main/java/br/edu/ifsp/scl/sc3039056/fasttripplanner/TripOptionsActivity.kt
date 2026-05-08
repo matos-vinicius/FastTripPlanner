@@ -20,6 +20,7 @@ class TripOptionsActivity : AppCompatActivity() {
     private var destino   = ""
     private var dias      = 0
     private var orcamento = 0.0
+    private var modoEconomico = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,7 +36,6 @@ class TripOptionsActivity : AppCompatActivity() {
         destino   = intent.getStringExtra("EXTRA_DESTINO") ?: ""
         dias      = intent.getIntExtra("EXTRA_DIAS", 0)
         orcamento = intent.getDoubleExtra("EXTRA_ORCAMENTO", 0.0)
-
         // Restaura o estado dos componentes após rotação de tela
         if (savedInstanceState != null) {
             val hospedagemId = savedInstanceState.getInt("hospedagem_id", -1)
@@ -43,10 +43,31 @@ class TripOptionsActivity : AppCompatActivity() {
             activityTripOptionsBinding.transporteCb.isChecked  = savedInstanceState.getBoolean("transporte")
             activityTripOptionsBinding.alimentacaoCb.isChecked = savedInstanceState.getBoolean("alimentacao")
             activityTripOptionsBinding.passeiosCb.isChecked    = savedInstanceState.getBoolean("passeios")
+            activityTripOptionsBinding.modoEconomicoCb.isChecked = savedInstanceState.getBoolean("modoeconomico")
         } else {
             // Primeira abertura: define econômica como opção padrão
             activityTripOptionsBinding.economicaRb.isChecked = true
         }
+
+        activityTripOptionsBinding.modoEconomicoCb.setOnClickListener {
+            modoEconomico = activityTripOptionsBinding.modoEconomicoCb.isChecked
+            if (modoEconomico) {
+                activityTripOptionsBinding.economicaRb.isChecked = true
+                activityTripOptionsBinding.passeiosCb.isChecked = false
+                activityTripOptionsBinding.passeiosCb.isEnabled = false
+                activityTripOptionsBinding.economicaRb.isEnabled = false
+                activityTripOptionsBinding.confortoRb.isEnabled = false
+                activityTripOptionsBinding.luxoRb.isEnabled = false
+                activityTripOptionsBinding.economicaRb.isChecked = true
+            }else{
+                activityTripOptionsBinding.passeiosCb.isEnabled = true
+                activityTripOptionsBinding.economicaRb.isEnabled = true
+                activityTripOptionsBinding.confortoRb.isEnabled = true
+                activityTripOptionsBinding.luxoRb.isEnabled = true
+            }
+        }
+
+
 
         activityTripOptionsBinding.calcularBt.setOnClickListener {
             // Validação: verifica se algum tipo de hospedagem foi selecionado
@@ -72,6 +93,7 @@ class TripOptionsActivity : AppCompatActivity() {
             tripSummaryIntent.putExtra("EXTRA_TRANSPORTE",  activityTripOptionsBinding.transporteCb.isChecked)
             tripSummaryIntent.putExtra("EXTRA_ALIMENTACAO", activityTripOptionsBinding.alimentacaoCb.isChecked)
             tripSummaryIntent.putExtra("EXTRA_PASSEIOS",    activityTripOptionsBinding.passeiosCb.isChecked)
+            tripSummaryIntent.putExtra("EXTRA_ECONOMICO", modoEconomico)
             startActivity(tripSummaryIntent)
         }
 
